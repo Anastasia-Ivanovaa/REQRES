@@ -5,9 +5,7 @@ import com.google.gson.GsonBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import models.CreateUserRq;
-import models.CreateUserRs;
-import models.UsersRs;
+import models.*;
 
 import static io.restassured.RestAssured.given;
 
@@ -20,7 +18,7 @@ public class UsersAPI {
             .create();
 
     public static RequestSpecification spec =
-            given()
+                given()
                     .log().all()
                     .contentType(ContentType.JSON);
 
@@ -53,7 +51,6 @@ public class UsersAPI {
     }
 
     public static Response deleteUser() {
-
         return
                 given()
                     .spec(spec)
@@ -62,5 +59,33 @@ public class UsersAPI {
                     .then()
                     .log().all()
                     .extract().response();
+    }
+
+    public static UpdateUserRs updateUser(UpdateUserRq updateUserRq){
+        return
+                given()
+                    .spec(spec)
+                    .body(gson.toJson(updateUserRq))
+                .when()
+                    .put(URL + "/2")
+                    .then()
+                    .log().all()
+                    .statusCode(200)
+                    .extract().response()
+                    .as(UpdateUserRs.class);
+    }
+
+    public static UpdateUserRs updateUserName(UpdateUserRq updateUserRq){
+        return
+                given()
+                        .spec(spec)
+                        .body(gson.toJson(updateUserRq))
+                .when()
+                        .patch(URL + "/2")
+                        .then()
+                        .log().all()
+                        .statusCode(200)
+                        .extract().response()
+                        .as(UpdateUserRs.class);
     }
 }

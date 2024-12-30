@@ -2,8 +2,8 @@ package tests;
 
 import models.CreateUserRq;
 import models.CreateUserRs;
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import static adapters.UsersAPI.createUser;
 
@@ -11,6 +11,7 @@ public class CreateUserTest {
 
     @Test
     public void checkCreateUser() {
+        SoftAssert softAssert = new SoftAssert();
 
         CreateUserRq rq = CreateUserRq.builder()
                 .name("morpheus")
@@ -18,8 +19,8 @@ public class CreateUserTest {
                 .build();
 
         CreateUserRs rs = createUser(rq);
-
-        Assert.assertEquals(rs.getName(),"morpheus","Invalid name");
-        Assert.assertEquals(rs.getJob(),"leader", "Invalid job");
+        softAssert.assertEquals(rs.getName(), "morpheus", "Invalid name");
+        softAssert.assertEquals(rs.getJob(), "leader", "Invalid job");
+        softAssert.assertAll();
     }
 }
